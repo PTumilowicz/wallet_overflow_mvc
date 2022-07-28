@@ -1,0 +1,277 @@
+.alert {
+    border: 1px solid #ccc;
+    padding: 6px;
+}
+
+.alert-info {
+    background-color: #d9edf7;
+}
+
+.alert-success {
+    background-color: #dff0d8;
+}
+
+.alert-warning {
+    background-color: #fcf8e3;
+}
+
+body {
+    height: 800px;
+    color: #F4F1DE;
+    background-color: #2F4858;
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+}
+
+.center {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+a {
+    color: #F4F1DE; 
+}
+
+.entry_form {
+    border: 3px solid #33658A;
+    width: 350px;
+    
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+.entry_form.login {
+    height: 250px;
+}
+
+.entry_form.register {
+    height: 500px;
+}
+
+.entry_form input,
+.main_form input,
+.main_form select,
+.main_form textarea {
+    font-family: 'Montserrat', sans-serif;
+    background: white;
+    color: black;
+    border: 3px solid #33658A;
+    font-size: small;
+    padding: 0.5em 0.25em;
+    text-align: left;
+}
+
+textarea {
+    resize: none;
+  }
+
+.rc-anchor-light { 
+    background: #2F4858 !important; 
+    color: #000 !important;
+}
+
+span {
+    font-size: small;
+}
+
+span a {
+    color: #F4F1DE;
+    text-decoration: underline;
+}
+
+nav {
+    background-color: #3b444b;
+    padding: 0.75em 0.5em;
+    border-bottom: 2px solid #33658A;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.nav_element {
+    display: flex;
+    justify-content: space-between;
+}
+
+.nav_element:nth-of-type(2n) {
+    margin-right: 2em;
+}
+
+.nav_element:nth-of-type(2n-1) {
+    margin-left: 1em;
+}
+
+#app_name {
+    font-size: 1.5em;
+    font-weight: 700;
+}
+
+main {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.sidebar {
+    border-right: 2px solid #33658A;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+}
+
+.sidebar_element {
+    font-size: medium;
+    width: 75%;
+    padding: 0.1em;
+    text-align: center;
+    margin-top: 1em;
+}
+
+.sidebar_element button,
+form button {
+    font-family: 'Montserrat', sans-serif;
+    width: 80%;
+    background: none;
+    color: #86BBD8;
+    border: 3px solid #33658A;
+    font-size: medium;
+    padding: 0.5em 0.25em;
+    text-align: center;
+}
+
+.sidebar button:hover,
+form button:hover {
+    color: #F4F1DE;
+    border-color: #979584;
+}
+
+.sidebar_element button.active_button {
+    color: #F4F1DE;
+    background-color: #33658A;
+}
+
+.content {
+    flex: 5;
+}
+
+.main_content {
+    width: 90%;
+    max-height: auto;
+    border: 3px solid #33658A;
+    border-radius: 1em 2em;
+    margin: 2em auto;
+    text-align: left;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.main_content.balance {
+    display: block;
+}
+
+.main_content table {
+    width: 80%;
+    margin: 2em auto;
+}
+
+.main_content h3,
+.main_content p {
+    margin: 2em;
+}
+
+.main_content h4,
+.main_content h5 {
+    text-align: center;
+}
+
+.main_content_column {
+    width: 40%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+.main_content_column h3,
+.main_content_column p,
+.main_content_column table,
+.main_content_column form {
+    margin-left: 2em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+.main_form {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+}
+
+.main_form label,
+.main_form input,
+.main_form select,
+.main_form textarea {
+    width: 65%;
+    margin: 0.5em;
+    box-sizing: border-box;
+}
+
+.main_form button {
+    width: 50%;
+    margin: 0.5em;
+    box-sizing: border-box;
+}
+
+.main_content form button {
+    margin-top: 2em;
+}
+
+.white_icon {
+    filter: brightness(0) invert(1);
+    margin-right: 0.5em;
+}
+
+table, th, td {
+    border: 3px solid #33658A;
+    border-collapse: collapse;
+}
+
+table {
+    width: 60%;
+}
+
+th {
+    background-color: #33658A;
+}
+
+th, td {
+    padding: 0.5em;
+    text-align: center;
+}
+
+.error {
+    color: red;
+    margin: 5px 0px;
+}
+
+.success {
+    color: green;
+    margin: 5px 0px;
+}
+
+.hidden {
+    display:none;
+}
+
+.piechart {
+    width: 500px;
+    height: 400px;
+    margin: 0.5em auto;
+}
