@@ -1,5 +1,0 @@
-Password reset
-
-Please check the following link to reset your password:
-
-{{ url }}
