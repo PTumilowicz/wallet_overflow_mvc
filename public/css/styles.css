@@ -35,6 +35,41 @@ a {
     color: #F4F1DE; 
 }
 
+.button {
+    display: block;
+    width: 150px;
+    height: 25px;
+    margin-top: 1.5em;
+    background: none;
+    padding: 10px;
+    text-align: center;
+    border: 3px solid #33658A;
+    border-radius: 5px;
+    line-height: 25px;
+    text-decoration: none;
+}
+
+.button:hover {
+    color: #F4F1DE;
+    border-color: #979584;
+}
+
+form button {
+    font-family: 'Montserrat', sans-serif;
+    width: 80%;
+    background: none;
+    color: #86BBD8;
+    border: 3px solid #33658A;
+    font-size: medium;
+    padding: 0.5em 0.25em;
+    text-align: center;
+}
+
+form button:hover {
+    color: #F4F1DE;
+    border-color: #979584;
+}
+
 .entry_form {
     border: 3px solid #33658A;
     width: 350px;
@@ -126,31 +161,7 @@ main {
     flex: 1;
 }
 
-.sidebar_element {
-    font-size: medium;
-    width: 75%;
-    padding: 0.1em;
-    text-align: center;
-    margin-top: 1em;
-}
 
-.sidebar_element button,
-form button {
-    font-family: 'Montserrat', sans-serif;
-    width: 80%;
-    background: none;
-    color: #86BBD8;
-    border: 3px solid #33658A;
-    font-size: medium;
-    padding: 0.5em 0.25em;
-    text-align: center;
-}
-
-.sidebar button:hover,
-form button:hover {
-    color: #F4F1DE;
-    border-color: #979584;
-}
 
 .sidebar_element button.active_button {
     color: #F4F1DE;

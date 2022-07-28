@@ -6,25 +6,32 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-    {% if current_user %}
-        <nav>
-            <li><a href="/">Home</a></li>
-            <li><a href="/profile/show">Profile</a></li>
-            <li><a href="/logout">Logout</a></li>
-        </nav>
-    {% endif %}
-
     {% for message in flash_messages %}
         <div class="alert alert-{{ message.type }}">
             {{ message.body }}
         </div>
     {% endfor %}
 
+    {% if current_user %}
+        <nav>
+            <p>Welcome {{ current_user.name }}</p>
+        </nav>
+
+        <main>
+            <div class="sidebar">
+                <a href="/" class="button">Home</a>
+                <a href="/income/show" class="button">Income</a>
+                <a href="/expense/show" class="button">Expense</a>
+                <a href="/balance/show" class="button">Balance</a>
+                <a href="/profile/show" class="button">Profile</a>
+                <a href="/logout" class="button">Logout</a>
+            </div>
+    {% endif %}
+
     {% block body %}
     {% endblock %}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.min.js"></script>
-
     {% block footer %}
     {% endblock %}
 </body>

@@ -1,0 +1,81 @@
+{% extends 'base.twig' %}
+
+{% block title %}Income{% endblock %}
+
+{% block footer %}
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script ype="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script src="/js/piechart.js"></script>
+    <script src="/js/balance.js"></script>
+{% endblock %}
+
+{% block body %}  
+
+    <div class="content">
+        <div class="main_content">
+            <div class="main_content_column">
+                <h3>Balance details</h3>
+                <form class="main_form" action="balance_script.php" method="POST">
+                    <select name="period" required>
+                        <option value="">--- Choose period ---</option>
+                        <option value="current_month" selected="selected">Current month</option>
+                        <option value="last_month">Last month</option>
+                        <option value="current_year">Current year</option>
+                        <option value="custom_period">Custom...</option>
+                    </select>
+                    <label class="hidden" for="start_date">Start date:</label>
+                    <input class="hidden" type="date" name="start_date" min='2000-01-01'>
+                    <label class="hidden" for="end_date">End date:</label>
+                    <input class="hidden" type="date" name="end_date" min='2000-01-01'>
+                    <button>Show balance</button>
+                </form>
+                {# <?php
+                    if(isset($_SESSION['e_period'])) echo '<div class="error">'.$_SESSION['e_period'].'</div>';
+                    unset($_SESSION['e_period']);
+                ?> #}
+            </div>
+
+        </div>
+        {# <?php
+            if (!empty($incomeBalance) || !empty($expenseBalance)) { ?> #}
+            <div class="main_content balance">
+                <h3>Balance</h3>
+                <p>Start Date: <?= $startDate ?></p><p>End Date: <?= $endDate ?></p>
+                <h4>Income balance</h4>
+                <table id="income_table">
+                    <tr>
+                        <th style="width:50%">Category</th>
+                        <th>Income amount [PLN]</th>
+                    </tr>
+                    {# <?php
+                        foreach ($incomeBalance as $income) {
+                            $incomeTotal += $income['incomeSum'];
+                            echo '<tr><td>'.$income['name'].'</td><td>'.number_format($income['incomeSum'], 2, ',', ' ').'</td></tr>';
+                        }
+                    ?> #}
+                </table>
+                {# <?php if (!empty($incomeBalance)) echo '<div class="piechart" id="incomePiechart"></div>'; ?>
+                <?='<h5>Total income in selected period: '. number_format($incomeTotal, 2, ',', ' ') . ' PLN</h5>' ?> #}
+                <h4>Expense balance</h4>
+                <table id="expense_table">
+                    <tr>
+                        <th style="width:50%">Category</th>
+                        <th>Expense amount [PLN]</th>
+                    </tr>
+                    {# <?php
+                        foreach ($expenseBalance as $expense) {
+                            $expenseTotal += $expense['expenseSum'];
+                            echo '<tr><td>'.$expense['name'].'</td><td>'.number_format($expense['expenseSum'], 2, ',', ' ').'</td></tr>';
+                        }
+                    ?> #}
+                </table>
+                {# <?php if (!empty($expenseBalance)) echo '<div class="piechart" id="expensePiechart"></div>'; ?>
+                <?php $balance = $incomeTotal - $expenseTotal >= 0 ? 'success' : 'error'; ?>
+                <?= '<h5>Total expense in selected period: '. number_format($expenseTotal, 2, ',', ' ') . ' PLN</h5>' ?>
+                <?= '<h3 class="'.$balance.'">Your balance is: ' . number_format($incomeTotal - $expenseTotal, 2, ',', ' ') . ' PLN</h3>' ?> #}
+            </div>
+        {# <?php } ?> #}
+    </div>
+</main>
+
+{% endblock %}

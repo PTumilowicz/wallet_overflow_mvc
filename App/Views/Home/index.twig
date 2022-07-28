@@ -3,13 +3,10 @@
 {% block title %}Home{% endblock %}
 
 {% block body %}
-
-    <h1>Welcome</h1>
-
-    {% if current_user %}
-        Hello {{ current_user.name }}.
-    {% else %}
-        <a href="/signup/new">Sign up</a> or <a href="/login">log in</a>.
-    {% endif %}
-
+        <div class="content">
+            <div class="main_content">
+                <h3>Welcome to the home page of Wallet Overflow!</h3>
+            </div>
+        </div>
+    </main>
 {% endblock %}

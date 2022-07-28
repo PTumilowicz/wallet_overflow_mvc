@@ -1,0 +1,57 @@
+{% extends 'base.twig' %}
+
+{% block title %}Income{% endblock %}
+
+{% block body %}     
+    <div class="content">
+        <div class="main_content">
+        <div class="main_content_column">
+                <h3>Add your income</h3>
+                {# <?php
+                    if (isset($_SESSION['s_income'])) echo '<div class="success">'.$_SESSION['s_income'].'</div>';
+                    unset($_SESSION['s_income']);
+                ?> #}
+                <form class="main_form" action="income_script.php" method="POST">
+                    <label for="amount">Income amount:</label>
+                    <input type="number" name="amount" min="0" step="0.01" required>
+                    <label for="date">Income date:</label>
+                    <input type="date" name="date" min='2000-01-01' value="<?= date('Y-m-d'); ?>" required>
+                    <label for="category">Income category:</label>
+                    <select name="category" required>
+                        <option value="">--- Choose category ---</option>
+                        {# <?php
+                            foreach ($userIncomeCategories as $incomeCategory) {
+                                echo '<option value="'.$incomeCategory['name'].'">'.$incomeCategory['name'].'</option>';
+                            }
+                        ?> #}
+                    </select>
+                    <label for="comment">Your comment (optional):</label>
+                    <textarea rows="5" name="comment" placeholder="Enter your comment here" maxlength="100"></textarea>
+                    {# <?php
+                        if (isset($_SESSION['e_income_comment'])) echo '<div class="error">'.$_SESSION['e_income_comment'].'</div>';
+                        unset($_SESSION['e_income_comment']);
+                    ?> #}
+                    <button>Add income</button>
+                </form>
+            </div>
+            <div class="main_content_column">
+                <div>
+                    <h3>Add your category</h3>
+                    <form class="main_form" action="income_script.php" method="POST">
+                        <label for="new_income_category">Enter new income category:</label>
+                        <input type="text" name="new_income_category" required>
+                        {# <?php
+                            if (isset($_SESSION['e_new_income_category'])) echo '<div class="error">'.$_SESSION['e_new_income_category'].'</div>';
+                            unset($_SESSION['e_new_income_category']);
+                            if (isset($_SESSION['s_new_income_category'])) echo '<div class="success">'.$_SESSION['s_new_income_category'].'</div>';
+                            unset($_SESSION['s_new_income_category']);
+                        ?> #}
+                        <button>Add income category</button>
+                    </form>
+                </div>
+            </div> 
+        </div>
+    </div>
+</main>
+
+{% endblock %}
