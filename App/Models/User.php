@@ -274,9 +274,9 @@ class User extends \Core\Model {
                         email = :email';
 
             if (isset($this->password)) {
-                $sql = ', password_hash = :password_hash';
+                $sql .= ', password_hash = :password_hash';
             }
-                        
+
             $sql .= "\nWHERE id = :id";
 
             $db = static::getDB();
@@ -286,7 +286,7 @@ class User extends \Core\Model {
             $stmt->bindValue(':email', $this->email, PDO::PARAM_STR);
             $stmt->bindValue(':id', $this->id, PDO::PARAM_INT);
             
-            if (isset($this->passwod)) {
+            if (isset($this->password)) {
                 $password_hash = password_hash($this->password, PASSWORD_DEFAULT);
                 $stmt->bindValue(':password_hash', $password_hash, PDO::PARAM_STR);
             }

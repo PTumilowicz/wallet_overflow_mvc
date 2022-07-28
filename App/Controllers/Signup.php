@@ -25,7 +25,7 @@ class Signup extends \Core\Controller {
     }
 
     public function successAction() {
-        View::renderTemplate('Signup/success.html');
+        View::renderTemplate('Signup/success.twig');
     }
 
     public function activateAction() {
