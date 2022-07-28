@@ -245,16 +245,81 @@ class User extends \Core\Model {
         $token = new Token($value);
         $hashed_token = $token->getHash();
 
+        $user_id = static::findByActivationToken($hashed_token);
+
+        static::copyExpensesCategories($user_id);
+        static::copyIncomesCategories($user_id);
+        static::copyPaymentMethods($user_id);
+
         $sql = 'UPDATE users
-                SET is_active = 1,
+            SET is_active = 1,
                 activation_hash = null
-                WHERE activation_hash = :hashed_token';
+            WHERE activation_hash = :hashed_token';
 
         $db = static::getDB();
         $stmt = $db->prepare($sql);
         $stmt->bindParam(':hashed_token', $hashed_token, PDO::PARAM_STR);
         $stmt->setFetchMode(PDO::FETCH_CLASS, get_called_class());
 
+        $stmt->execute();  
+    }
+
+    public static function findByActivationToken($hashed_token) {
+        $sql = 'SELECT id FROM users
+                WHERE activation_hash = :hashed_token';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':hashed_token', $hashed_token, PDO::PARAM_STR);
+        $stmt->execute();
+
+        $fetchArray = $stmt->fetch();
+        return $fetchArray['id'];
+    }
+
+    public static function copyExpensesCategories($user_id) {
+        $sql = 'INSERT INTO expenses_category_assigned_to_users (name)
+                SELECT name FROM expenses_category_default';
+    
+        $db = static::getDB();
+        $db->exec($sql);
+    
+        $sql = 'UPDATE expenses_category_assigned_to_users
+                SET user_id = :user_id ORDER BY id DESC LIMIT 16';
+    
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_STR);
+        $stmt->execute();
+    }
+
+    public static function copyIncomesCategories($user_id) {
+    
+        $sql = 'INSERT INTO incomes_category_assigned_to_users (name)
+                SELECT name FROM incomes_category_default';
+    
+        $db = static::getDB();
+        $db->exec($sql);
+    
+        $sql = 'UPDATE incomes_category_assigned_to_users
+                SET `user_id` = :user_id ORDER BY id DESC LIMIT 4';
+    
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_STR);
+        $stmt->execute();
+    }
+
+    public static function copyPaymentMethods($user_id) {
+        $sql = 'INSERT INTO payment_methods_assigned_to_users (name)
+                SELECT name FROM payment_methods_default';
+
+        $db = static::getDB();
+        $db->exec($sql);
+
+        $sql = 'UPDATE payment_methods_assigned_to_users
+                SET `user_id` = :user_id ORDER BY id DESC LIMIT 3';
+
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_STR);
         $stmt->execute();
     }
 
@@ -295,7 +360,4 @@ class User extends \Core\Model {
         }
         return false;
     }
-
-
-
 }

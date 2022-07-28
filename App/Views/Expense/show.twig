@@ -1,6 +1,6 @@
 {% extends 'base.twig' %}
 
-{% block title %}Income{% endblock %}
+{% block title %}Expense{% endblock %}
 
 {% block body %}  
 
@@ -20,20 +20,16 @@
                     <label for="category">Expense category:</label>
                     <select name="category" required>
                         <option value="">--- Choose category ---</option>
-                        {# <?php
-                            foreach ($userExpenseCategories as $expenseCategory) {
-                                echo '<option value="'.$expenseCategory['name'].'">'.$expenseCategory['name'].'</option>';
-                            }
-                        ?> #}
+                            {% for expense_category in expense_categories %}
+                                <option>{{ expense_category.name }}</option>
+                            {% endfor %}
                     </select>
                     <label for="payment_method">Payment method:</label>
                     <select name="payment_method" required>
                         <option value="">--- Choose payment method ---</option>
-                        {# <?php
-                            foreach ($userPaymentMethods as $paymentMethod) {
-                                echo '<option value="'.$paymentMethod['name'].'">'.$paymentMethod['name'].'</option>';
-                            }
-                        ?> #}
+                            {% for payment_method in payment_methods %}
+                                <option>{{ payment_method.name }}</option>
+                            {% endfor %}
                     </select>
                     <label for="comment">Your comment (optional):</label>
                     <textarea rows="5" name="comment" placeholder="Enter your comment here" maxlength="100"></textarea>
