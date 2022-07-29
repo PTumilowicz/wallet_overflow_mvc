@@ -34,6 +34,5 @@ class Profile extends Authenticated {
                 'user' => $this->user
             ]);
         }
-
     }
 }

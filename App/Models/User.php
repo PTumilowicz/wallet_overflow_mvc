@@ -47,7 +47,7 @@ class User extends \Core\Model {
     }
 
     public function validate() {
-       // Name
+        // Name
         if ($this->name == '') {
             $this->errors[] = 'Name is required';
         }
