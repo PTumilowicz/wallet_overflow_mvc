@@ -8,15 +8,20 @@
         <div class="main_content">
             <div class="main_content_column">
                 <h3>Add your expense</h3>
-                {# <?php
-                    if (isset($_SESSION['s_expense'])) echo '<div class="success">'.$_SESSION['s_expense'].'</div>';
-                    unset($_SESSION['s_expense']);
-                ?> #}
-                <form class="main_form" action="expense_script.php" method="POST">
+
+                {% if session.s_expense is defined %}
+                    <div class="success"> {{ session.s_expense }} </div>
+                {% endif %}
+
+                {% if session.e_expense is defined %}
+                    <div class="error"> {{ session.e_expense }} </div>
+                {% endif %}
+
+                <form class="main_form" action="/expense/add" method="post">
                     <label for="amount">Expense amount:</label>
                     <input type="number" name="amount" min="0" step="0.01" required>
                     <label for="date">Expense date:</label>
-                    <input type="date" name="date" min='2000-01-01' value="<?= date('Y-m-d'); ?>" required>
+                    <input type="date" name="date" min='2000-01-01' value="{{ "now"|date("Y-m-d") }}" required>
                     <label for="category">Expense category:</label>
                     <select name="category" required>
                         <option value="">--- Choose category ---</option>
@@ -33,10 +38,11 @@
                     </select>
                     <label for="comment">Your comment (optional):</label>
                     <textarea rows="5" name="comment" placeholder="Enter your comment here" maxlength="100"></textarea>
-                    {# <?php
-                        if (isset($_SESSION['e_expense_comment'])) echo '<div class="error">'.$_SESSION['e_expense_comment'].'</div>';
-                        unset($_SESSION['e_expense_comment']);
-                    ?> #}
+
+                    {% if session.e_expense_comment is defined %}
+                        <div class="error"> {{ session.e_expense_comment }} </div>
+                    {% endif %}
+
                     <button>Add expense</button>
                 </form>
             </div>
@@ -46,12 +52,15 @@
                     <form class="main_form" action="expense_script.php" method="POST">
                         <label for="new_expense_category">Enter new expense category:</label>
                         <input type="text" name="new_expense_category" required>
-                        {# <?php
-                            if (isset($_SESSION['e_new_expense_category'])) echo '<div class="error">'.$_SESSION['e_new_expense_category'].'</div>';
-                            unset($_SESSION['e_new_expense_category']);
-                            if (isset($_SESSION['s_new_expense_category'])) echo '<div class="success">'.$_SESSION['s_new_expense_category'].'</div>';
-                            unset($_SESSION['s_new_expense_category']);
-                        ?> #}
+
+                        {% if session.e_new_expense_category is defined %}
+                            <div class="error"> {{ session.e_new_expense_category }} </div>
+                        {% endif %}
+
+                        {% if session.s_new_expense_category is defined %}
+                            <div class="error"> {{ session.s_new_expense_category }} </div>
+                        {% endif %}
+
                         <button>Add expense category</button>
                     </form>
                 </div>
@@ -60,12 +69,15 @@
                     <form class="main_form" action="expense_script.php" method="POST">
                         <label for="new_payment_method">Enter new payment method:</label>
                         <input type="text" name="new_payment_method" required>
-                        {# <?php
-                            if (isset($_SESSION['e_new_payment_method'])) echo '<div class="error">'.$_SESSION['e_new_payment_method'].'</div>';
-                            unset($_SESSION['e_new_payment_method']);
-                            if (isset($_SESSION['s_new_payment_method'])) echo '<div class="success">'.$_SESSION['s_new_payment_method'].'</div>';
-                            unset($_SESSION['s_new_payment_method']);
-                        ?> #}
+
+                        {% if session.e_new_payment_method is defined %}
+                            <div class="error"> {{ session.e_new_payment_method }} </div>
+                        {% endif %}
+
+                        {% if session.s_new_payment_method is defined %}
+                            <div class="error"> {{ session.s_new_payment_method }} </div>
+                        {% endif %}
+
                         <button>Add payment method</button>
                     </form>
                 </div>
