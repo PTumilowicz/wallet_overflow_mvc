@@ -44,4 +44,36 @@ class Expense extends Authenticated {
         }
         $this->redirect('/expense/show');
     }
+
+    public function addCategoryAction() {
+        $expenseCategory = $_POST['new_expense_category'];
+        $user_id = $this->user->id;
+
+        $categoryToUpper = strtoupper($expenseCategory);
+
+        if (ExpenseCategory::checkIfExpenseCategoryExists($user_id, $categoryToUpper)) {
+            if (ExpenseCategory::addExpenseCategory($user_id, $expenseCategory)) {
+                $_SESSION['s_new_expense_category'] = 'New expense category added.';
+            }
+        } else {
+            $_SESSION['e_new_expense_category'] = 'Category already exists.';
+        }
+        $this->redirect('/expense/show');
+    }
+
+    public function addPaymentMethodAction() {
+        $paymentMethod = $_POST['new_payment_method'];
+        $user_id = $this->user->id;
+
+        $paymentMethodToUpper = strtoupper($paymentMethod);
+
+        if (ExpenseCategory::checkIfPaymentMethodExists($user_id, $paymentMethodToUpper)) {
+            if (ExpenseCategory::addPaymentMethod($user_id, $paymentMethod)) {
+                $_SESSION['s_new_payment_method'] = 'New payment method added.';
+            }
+        } else {
+            $_SESSION['e_new_payment_method'] = 'Payment method already exists.';
+        }
+        $this->redirect('/expense/show');
+    }
 }
