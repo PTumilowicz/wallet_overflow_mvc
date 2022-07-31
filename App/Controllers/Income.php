@@ -19,6 +19,8 @@ class Income extends Authenticated {
         unset($_SESSION['e_income_comment']);
         unset($_SESSION['s_income']);
         unset($_SESSION['e_income']);
+        unset($_SESSION['e_new_income_category']);
+        unset($_SESSION['s_new_income_category']);
     }
     
     public function showAction() {
@@ -34,6 +36,22 @@ class Income extends Authenticated {
 
         if ($income->addIncome($user_id)) {
             $_SESSION['s_income'] = 'Income added succesfully.';
+        }
+        $this->redirect('/income/show');
+    }
+
+    public function addCategoryAction() {
+        $incomeCategory = $_POST['new_income_category'];
+        $user_id = $this->user->id;
+
+        $categoryToUpper = strtoupper($incomeCategory);
+
+        if (IncomeCategory::checkIfIncomeCategoryExists($user_id, $categoryToUpper)) {
+            if (IncomeCategory::addIncomeCategory($user_id, $incomeCategory)) {
+                $_SESSION['s_new_income_category'] = 'New income category added.';
+            }
+        } else {
+            $_SESSION['e_new_income_category'] = 'Category already exists.';
         }
         $this->redirect('/income/show');
     }
