@@ -4,8 +4,55 @@
 
 {% block footer %}
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script ype="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script src="/js/piechart.js"></script>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', {'packages':['corechart']});
+
+        google.charts.setOnLoadCallback(drawFirstChart);
+        google.charts.setOnLoadCallback(drawSecondPiechart);
+
+        function drawFirstChart() {
+            const data = google.visualization.arrayToDataTable([
+                ['Category', 'Income Amount'],
+                //<?php
+                //     foreach ($incomeBalance as $income) {
+                //         echo "['".$income['name']."', ".number_format($income['incomeSum'], 2, '.', '')."],";
+                //     }
+                // ?>
+            ]);
+
+            const options = {
+                title: 'Income Balance',
+                is3D: true,
+                backgroundColor: 'transparent',
+                colors: ['#344E41', '#3A5A40', '#588157', '#A3B18A', '#DAD7CD'],
+            };
+
+            const chart = new google.visualization.PieChart(document.getElementById('incomePiechart'));
+            chart.draw(data, options);
+        }
+
+        function drawSecondPiechart() {
+            const data = google.visualization.arrayToDataTable([
+                ['Category', 'Income Amount'],
+                // <?php
+                //     foreach ($expenseBalance as $expense) {
+                //         echo "['".$expense['name']."', ".number_format($expense['expenseSum'], 2, '.', '')."],";
+                //     }
+                // ?>
+            ]);
+
+            const options = {
+                title: 'Expense Balance',
+                is3D: true,
+                backgroundColor: 'transparent',
+                colors: ['#F25C54', '#F27059', '#F4845F', '#F79D65', '#F7B267'],
+            };
+
+            const chart = new google.visualization.PieChart(document.getElementById('expensePiechart'));
+            chart.draw(data, options);
+        }
+    </script>
     <script src="/js/balance.js"></script>
 {% endblock %}
 
@@ -14,8 +61,13 @@
     <div class="content">
         <div class="main_content">
             <div class="main_content_column">
-                <h3>Balance details</h3>
-                <form class="main_form" action="balance_script.php" method="POST">
+                <h3>Balance details</h3>         
+                <form class="main_form" action="/balance/calculate" method="post">
+
+                    {% if session.e_period is defined %}
+                        <div class="error"> {{ session.e_period }} </div>
+                    {% endif %}
+
                     <select name="period" required>
                         <option value="">--- Choose period ---</option>
                         <option value="current_month" selected="selected">Current month</option>
@@ -29,15 +81,11 @@
                     <input class="hidden" type="date" name="end_date" min='2000-01-01'>
                     <button>Show balance</button>
                 </form>
-                {# <?php
-                    if(isset($_SESSION['e_period'])) echo '<div class="error">'.$_SESSION['e_period'].'</div>';
-                    unset($_SESSION['e_period']);
-                ?> #}
             </div>
-
         </div>
-        {# <?php
-            if (!empty($incomeBalance) || !empty($expenseBalance)) { ?> #}
+
+        {% if income_balance is not null and income_balance is not empty or expense_balance is not null and expense_balance is not empty %}
+
             <div class="main_content balance">
                 <h3>Balance</h3>
                 <p>Start Date: <?= $startDate ?></p><p>End Date: <?= $endDate ?></p>
@@ -47,34 +95,44 @@
                         <th style="width:50%">Category</th>
                         <th>Income amount [PLN]</th>
                     </tr>
-                    {# <?php
-                        foreach ($incomeBalance as $income) {
-                            $incomeTotal += $income['incomeSum'];
-                            echo '<tr><td>'.$income['name'].'</td><td>'.number_format($income['incomeSum'], 2, ',', ' ').'</td></tr>';
-                        }
-                    ?> #}
+
+                    {% set totalIncome = 0 %}
+                    {% for income in income_balance %}
+                        {% set totalIncome = totalIncome + income.incomeSum %}
+                        <tr><td>{{ income.name }}</td><td>{{ income.incomeSum | number_format(2, ',', ' ') }}</td></tr>
+                    {% endfor %}
+
                 </table>
-                {# <?php if (!empty($incomeBalance)) echo '<div class="piechart" id="incomePiechart"></div>'; ?>
-                <?='<h5>Total income in selected period: '. number_format($incomeTotal, 2, ',', ' ') . ' PLN</h5>' ?> #}
+
+                {% if income_balance is not null and income_balance is not empty %}
+                    <div class="piechart" id="incomePiechart"></div>
+                    <h5>Total income in selected period: {{ totalIncome | number_format(2, ',', ' ') }} PLN</h5>
+                {% endif %}
+
                 <h4>Expense balance</h4>
                 <table id="expense_table">
                     <tr>
                         <th style="width:50%">Category</th>
                         <th>Expense amount [PLN]</th>
                     </tr>
-                    {# <?php
-                        foreach ($expenseBalance as $expense) {
-                            $expenseTotal += $expense['expenseSum'];
-                            echo '<tr><td>'.$expense['name'].'</td><td>'.number_format($expense['expenseSum'], 2, ',', ' ').'</td></tr>';
-                        }
-                    ?> #}
+
+                    {% set totalExpense = 0 %}
+                    {% for expense in expense_balance %}
+                        {% set totalExpense = totalExpense + income.expenseSum %}
+                        <tr><td>{{ expense.name }}</td><td>{{ expense.expenseSum | number_format(2, ',', ' ') }}</td></tr>
+                    {% endfor %}
+
                 </table>
-                {# <?php if (!empty($expenseBalance)) echo '<div class="piechart" id="expensePiechart"></div>'; ?>
-                <?php $balance = $incomeTotal - $expenseTotal >= 0 ? 'success' : 'error'; ?>
-                <?= '<h5>Total expense in selected period: '. number_format($expenseTotal, 2, ',', ' ') . ' PLN</h5>' ?>
-                <?= '<h3 class="'.$balance.'">Your balance is: ' . number_format($incomeTotal - $expenseTotal, 2, ',', ' ') . ' PLN</h3>' ?> #}
+
+                {% if expense_balance is not null and expense_balance is not empty %}
+                    <div class="piechart" id="expensePiechart"></div>
+                    <h5>Total expense in selected period: {{ totalExpense | number_format(2, ',', ' ') }} PLN</h5>
+                {% endif %}
+
             </div>
-        {# <?php } ?> #}
+
+        {% endif %}
+
     </div>
 </main>
 

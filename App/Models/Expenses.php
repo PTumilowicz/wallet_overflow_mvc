@@ -60,7 +60,9 @@ class Expenses extends \Core\Model {
             $_SESSION['e_expense_comment'] = 'Only alphanumeric values and spaces allowed.';
         }
 
-        $_SESSION['e_expense'] = 'Expense was not added';
+        if (!empty($this->errors)) {
+            $_SESSION['e_expense'] = 'Expense was not added';
+        }
     }
 
     public static function findExpenseCategoryId($user_id, $category) {
@@ -89,5 +91,21 @@ class Expenses extends \Core\Model {
 
         $fetchArray = $stmt->fetch(PDO::FETCH_ASSOC);
         return $fetchArray['id'];
+    }
+
+    public static function getExpenseBalance($user_id, $start_date, $end_date) {
+        $sql = 'SELECT `name`, SUM(`amount`) AS expenseSum FROM `expenses`, `expenses_category_assigned_to_users`
+                WHERE `expenses`.`expense_category_assigned_to_user_id` = `expenses_category_assigned_to_users`.`id`
+                AND `expenses`.`user_id` = :userId AND `expenses`.`date_of_expense` BETWEEN :startDate AND :endDate
+                GROUP BY `expense_category_assigned_to_user_id` ORDER BY expenseSum DESC';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':userId', $user_id, PDO::PARAM_INT);
+        $stmt->bindParam(':startDate', $start_date, PDO::PARAM_STR);
+        $stmt->bindParam(':endDate', $end_date, PDO::PARAM_STR);
+        $stmt->execute();
+    
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

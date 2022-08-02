@@ -58,7 +58,9 @@ class Incomes extends \Core\Model {
             $_SESSION['e_income_comment'] = 'Only alphanumeric values and spaces allowed.';
         }
 
-        $_SESSION['e_income'] = 'Income was not added';
+        if (!empty($this->errors)) {
+            $_SESSION['e_income'] = 'Income was not added';
+        }
     }
 
     public static function findInomeCategoryId($user_id, $category) {
@@ -73,5 +75,21 @@ class Incomes extends \Core\Model {
 
         $fetchArray = $stmt->fetch(PDO::FETCH_ASSOC);
         return $fetchArray['id'];
+    }
+
+    public static function getIncomeBalance($user_id, $start_date, $end_date) {
+        $sql = 'SELECT `name`, SUM(`amount`) AS incomeSum FROM `incomes`, `incomes_category_assigned_to_users`
+                WHERE `incomes`.`income_category_assigned_to_user_id` = `incomes_category_assigned_to_users`.`id`
+                AND `incomes`.`user_id` = :userId AND `incomes`.`date_of_income` BETWEEN :startDate AND :endDate
+                GROUP BY `income_category_assigned_to_user_id` ORDER BY incomeSum DESC';
+    
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':userId', $user_id, PDO::PARAM_INT);
+        $stmt->bindParam(':startDate', $start_date, PDO::PARAM_STR);
+        $stmt->bindParam(':endDate', $end_date, PDO::PARAM_STR);
+        $stmt->execute();
+    
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
