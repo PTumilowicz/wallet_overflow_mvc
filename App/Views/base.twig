@@ -15,7 +15,12 @@
 
     {% if current_user %}
         <nav>
-            <p>Welcome {{ current_user.name }}</p>
+            <div class="nav_element">
+                <img src="/images/wallet-money.svg" class="white_icon" width="30" height="30" alt="logo"><div id="app_name">WALLET OVERFLOW</div>
+            </div>
+            <div class="nav_element">
+                <p>Welcome {{ current_user.name }}</p>
+            </div>
         </nav>
 
         <main>

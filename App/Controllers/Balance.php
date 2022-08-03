@@ -47,6 +47,8 @@ class Balance extends Authenticated {
 
         View::renderTemplate('Balance/show.twig', [
             'user' => $this->user,
+            'start_date' => $start_date,
+            'end_date' => $end_date,
             'income_balance' => $income_balance,
             'expense_balance' => $expense_balance
         ]);

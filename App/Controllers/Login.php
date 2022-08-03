@@ -10,7 +10,13 @@ use \App\Flash;
 class Login extends \Core\Controller {
 
     public function newAction() {
-        View::renderTemplate('Login/new.twig');
+        $this->user = Auth::getUser();
+
+        if ($this->user) {
+            $this->redirect('/');
+        } else {
+            View::renderTemplate('Login/new.twig');
+        }
     }
 
     public function createAction() {

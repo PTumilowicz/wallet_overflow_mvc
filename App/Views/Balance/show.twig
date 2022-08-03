@@ -8,17 +8,19 @@
     <script>
         google.charts.load('current', {'packages':['corechart']});
 
-        google.charts.setOnLoadCallback(drawFirstChart);
-        google.charts.setOnLoadCallback(drawSecondPiechart);
+        {% if income_balance is not null and income_balance is not empty or expense_balance is not null and expense_balance is not empty %}
+            google.charts.setOnLoadCallback(drawFirstChart);
+            google.charts.setOnLoadCallback(drawSecondPiechart);
+        {% endif %}
 
         function drawFirstChart() {
             const data = google.visualization.arrayToDataTable([
                 ['Category', 'Income Amount'],
-                //<?php
-                //     foreach ($incomeBalance as $income) {
-                //         echo "['".$income['name']."', ".number_format($income['incomeSum'], 2, '.', '')."],";
-                //     }
-                // ?>
+                
+                {% for income in income_balance %}
+                    ['{{ income.name }}', {{ income.incomeSum | number_format(2, '.', '') }}],
+                {% endfor %}
+
             ]);
 
             const options = {
@@ -34,12 +36,12 @@
 
         function drawSecondPiechart() {
             const data = google.visualization.arrayToDataTable([
-                ['Category', 'Income Amount'],
-                // <?php
-                //     foreach ($expenseBalance as $expense) {
-                //         echo "['".$expense['name']."', ".number_format($expense['expenseSum'], 2, '.', '')."],";
-                //     }
-                // ?>
+                ['Category', 'Expense Amount'],
+
+                {% for expense in expense_balance %}
+                    ['{{ expense.name }}', {{ expense.expenseSum | number_format(2, '.', '') }}],
+                {% endfor %}
+
             ]);
 
             const options = {
@@ -88,7 +90,7 @@
 
             <div class="main_content balance">
                 <h3>Balance</h3>
-                <p>Start Date: <?= $startDate ?></p><p>End Date: <?= $endDate ?></p>
+                <p>Start Date: {{ start_date }} </p><p>End Date: {{ end_date }} </p>
                 <h4>Income balance</h4>
                 <table id="income_table">
                     <tr>
@@ -118,7 +120,7 @@
 
                     {% set totalExpense = 0 %}
                     {% for expense in expense_balance %}
-                        {% set totalExpense = totalExpense + income.expenseSum %}
+                        {% set totalExpense = totalExpense + expense.expenseSum %}
                         <tr><td>{{ expense.name }}</td><td>{{ expense.expenseSum | number_format(2, ',', ' ') }}</td></tr>
                     {% endfor %}
 
@@ -129,6 +131,8 @@
                     <h5>Total expense in selected period: {{ totalExpense | number_format(2, ',', ' ') }} PLN</h5>
                 {% endif %}
 
+                {% set balance = totalIncome - totalExpense %}
+                <h3 class="{{ (balance > 0) ? 'success' : 'error' }}">Your balance is: {{balance | number_format(2, ',', ' ') }} PLN</h3>
             </div>
 
         {% endif %}

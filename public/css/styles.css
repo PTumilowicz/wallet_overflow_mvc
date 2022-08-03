@@ -103,7 +103,7 @@ form button:hover {
 
 textarea {
     resize: none;
-  }
+}
 
 .rc-anchor-light { 
     background: #2F4858 !important; 
@@ -161,8 +161,6 @@ main {
     flex: 1;
 }
 
-
-
 .sidebar_element button.active_button {
     color: #F4F1DE;
     background-color: #33658A;
@@ -208,6 +206,7 @@ main {
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    margin: 1em;
 }
 
 .main_content_column h3,
