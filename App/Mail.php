@@ -16,15 +16,15 @@ class Mail {
             //Server settings 
             //$mail->SMTPDebug  = 4;                                    //Enable verbose debug output
             $mail->isSMTP();            
-            $mail->Host       = 'smtp.gmail.com';                       //Set the SMTP server to send through
+            $mail->Host       = Config::SMTP;                       //Set the SMTP server to send through
             $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-            $mail->Username   = 'pawel.tumilowicz.pp@gmail.com';        //SMTP username
-            $mail->Password   = Config::GMAIL_PASSWORD;                 //SMTP password
+            $mail->Username   = Config::MAIL_ADDRESS;                   //SMTP username
+            $mail->Password   = Config::PASSWORD;                 //SMTP password
             $mail->SMTPSecure = 'tls';                                  //Enable implicit TLS encryption
             $mail->Port       = 587;                                    //TCP port to connect to; use 587 if you have set `SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS`
         
             //Recipients
-            $mail->setFrom('pawel.tumilowicz.pp@gmail.com', 'Mailer');
+            $mail->setFrom(Config::MAIL_ADDRESS, 'Mailer');
             $mail->addAddress($to);                                     //Add a recipient
 
             //Content
@@ -34,7 +34,7 @@ class Mail {
             $mail->AltBody = $text;
         
             $mail->send();
-            echo 'Message has been sent';
+            // echo 'Message has been sent';
         } catch (Exception $e) {
             echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
         }

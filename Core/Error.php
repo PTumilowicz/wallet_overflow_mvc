@@ -33,7 +33,7 @@ class Error {
 
             error_log($message);
 
-            View::renderTemplate("{$code}.html");
+            View::renderTemplate("{$code}.twig");
         }
     }
 }

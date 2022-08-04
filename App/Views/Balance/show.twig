@@ -8,7 +8,7 @@
     <script>
         google.charts.load('current', {'packages':['corechart']});
 
-        {% if income_balance is not null and income_balance is not empty or expense_balance is not null and expense_balance is not empty %}
+        {% if income_balance is not null or income_balance is not empty and expense_balance is not null or expense_balance or empty %}
             google.charts.setOnLoadCallback(drawFirstChart);
             google.charts.setOnLoadCallback(drawSecondPiechart);
         {% endif %}
@@ -86,53 +86,61 @@
             </div>
         </div>
 
-        {% if income_balance is not null and income_balance is not empty or expense_balance is not null and expense_balance is not empty %}
+        {% if income_balance is not null or expense_balance is not null %}
 
             <div class="main_content balance">
                 <h3>Balance</h3>
                 <p>Start Date: {{ start_date }} </p><p>End Date: {{ end_date }} </p>
                 <h4>Income balance</h4>
-                <table id="income_table">
-                    <tr>
-                        <th style="width:50%">Category</th>
-                        <th>Income amount [PLN]</th>
-                    </tr>
 
-                    {% set totalIncome = 0 %}
-                    {% for income in income_balance %}
-                        {% set totalIncome = totalIncome + income.incomeSum %}
-                        <tr><td>{{ income.name }}</td><td>{{ income.incomeSum | number_format(2, ',', ' ') }}</td></tr>
-                    {% endfor %}
+                {% if income_balance is not empty %}
 
-                </table>
+                    <table id="income_table">
+                        <tr>
+                            <th style="width:50%">Category</th>
+                            <th>Income amount [PLN]</th>
+                        </tr>
 
-                {% if income_balance is not null and income_balance is not empty %}
+                        {% set totalIncome = 0 %}
+                        {% for income in income_balance %}
+                            {% set totalIncome = totalIncome + income.incomeSum %}
+                            <tr><td>{{ income.name }}</td><td>{{ income.incomeSum | number_format(2, ',', ' ') }}</td></tr>
+                        {% endfor %}
+
+                    </table>
+
                     <div class="piechart" id="incomePiechart"></div>
-                    <h5>Total income in selected period: {{ totalIncome | number_format(2, ',', ' ') }} PLN</h5>
+
                 {% endif %}
 
+                <h5>Total income in selected period: {{ totalIncome | number_format(2, ',', ' ') }} PLN</h5>
+                
                 <h4>Expense balance</h4>
-                <table id="expense_table">
-                    <tr>
-                        <th style="width:50%">Category</th>
-                        <th>Expense amount [PLN]</th>
-                    </tr>
 
-                    {% set totalExpense = 0 %}
-                    {% for expense in expense_balance %}
-                        {% set totalExpense = totalExpense + expense.expenseSum %}
-                        <tr><td>{{ expense.name }}</td><td>{{ expense.expenseSum | number_format(2, ',', ' ') }}</td></tr>
-                    {% endfor %}
+                {% if expense_balance is not empty %}
 
-                </table>
+                    <table id="expense_table">
+                        <tr>
+                            <th style="width:50%">Category</th>
+                            <th>Expense amount [PLN]</th>
+                        </tr>
 
-                {% if expense_balance is not null and expense_balance is not empty %}
+                        {% set totalExpense = 0 %}
+                        {% for expense in expense_balance %}
+                            {% set totalExpense = totalExpense + expense.expenseSum %}
+                            <tr><td>{{ expense.name }}</td><td>{{ expense.expenseSum | number_format(2, ',', ' ') }}</td></tr>
+                        {% endfor %}
+
+                    </table>
+
                     <div class="piechart" id="expensePiechart"></div>
-                    <h5>Total expense in selected period: {{ totalExpense | number_format(2, ',', ' ') }} PLN</h5>
+
                 {% endif %}
 
+                <h5>Total expense in selected period: {{ totalExpense | number_format(2, ',', ' ') }} PLN</h5>
+                    
                 {% set balance = totalIncome - totalExpense %}
-                <h3 class="{{ (balance > 0) ? 'success' : 'error' }}">Your balance is: {{balance | number_format(2, ',', ' ') }} PLN</h3>
+                <h3 class="{{ (balance >= 0) ? 'success' : 'error' }}">Your balance is: {{balance | number_format(2, ',', ' ') }} PLN</h3>
             </div>
 
         {% endif %}
