@@ -73,7 +73,6 @@ form button:hover {
 .entry_form {
     border: 3px solid #33658A;
     width: 350px;
-    
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
@@ -82,10 +81,12 @@ form button:hover {
 
 .entry_form.login {
     height: 250px;
+    max-height: 500px;
 }
 
 .entry_form.register {
-    height: 500px;
+    max-height: 700px;
+    padding: 1em;
 }
 
 .entry_form input,
@@ -99,6 +100,14 @@ form button:hover {
     font-size: small;
     padding: 0.5em 0.25em;
     text-align: left;
+}
+
+.entry_form.register input,
+.entry_form.register label,
+.entry_form.register div,
+.entry_form.register span,
+.entry_form.register button {
+    margin: 0.3em;
 }
 
 textarea {

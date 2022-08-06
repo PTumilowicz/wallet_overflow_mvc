@@ -3,20 +3,22 @@
 {% block title %}Wallet Overflow - Login{% endblock %}
 
 {% block body %}
-<body>
-    <div class="center">
-        <form class="entry_form login" id="formLogin" action="/login/create" method="post">
-            <div id="app_name">WALLET OVERFLOW</div>
-            <input type="email" id="inputEmail" name="email" placeholder="email address" value="{{ email }}" required />
-            <input type="password" id="inputPassword" name="password" placeholder="Password" required />
-            <label>
-                <input type="checkbox" name="remember_me" {% if remember_me %} checked="checked" {% endif %}/> Remember me
-            </label>
-            <button type="submit">Login</button>
-            <span>Don't have an account? <a href="/signup/new">Register</a></span>
-            <span>Forgot password? <a href="/password/forgot">Reset password</a></span>
-        </form>
-    </div>
-</body>
-</html>
+
+        <body>
+            <div class="center">
+                <form class="entry_form login" id="formLogin" action="/login/create" method="post">
+                    <div id="app_name">WALLET OVERFLOW</div>
+                    <input type="email" id="inputEmail" name="email" placeholder="email address" value="{{ email }}" required />
+                    <input type="password" id="inputPassword" name="password" placeholder="Password" required />
+                    <label>
+                        <input type="checkbox" name="remember_me" {% if remember_me %} checked="checked" {% endif %}/> Remember me
+                    </label>
+                    <button type="submit">Login</button>
+                    <span>Don't have an account? <a href="/signup/new">Register</a></span>
+                    <span>Forgot password? <a href="/password/forgot">Reset password</a></span>
+                </form>
+            </div>
+        </body>
+    </html>
+    
 {% endblock %}
