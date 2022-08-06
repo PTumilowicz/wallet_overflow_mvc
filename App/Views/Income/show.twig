@@ -38,25 +38,6 @@
                     <button>Add income</button>
                 </form>
             </div>
-            <div class="main_content_column">
-                <div>
-                    <h3>Add your category</h3>
-                    <form class="main_form" action="/income/add-category" method="post">
-                        <label for="new_income_category">Enter new income category:</label>
-                        <input type="text" name="new_income_category" required>
-
-                        {% if session.e_new_income_category is defined %}
-                            <div class="error"> {{ session.e_new_income_category }} </div>
-                        {% endif %}
-
-                        {% if session.s_new_income_category is defined %}
-                            <div class="success"> {{ session.s_new_income_category }} </div>
-                        {% endif %}
-
-                        <button>Add income category</button>
-                    </form>
-                </div>
-            </div> 
         </div>
     </div>
 </main>

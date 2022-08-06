@@ -45,42 +45,6 @@
 
                     <button>Add expense</button>
                 </form>
-            </div>
-            <div class="main_content_column">
-                <div>
-                    <h3>Add your category</h3>
-                    <form class="main_form" action="/expense/add-category" method="post">
-                        <label for="new_expense_category">Enter new expense category:</label>
-                        <input type="text" name="new_expense_category" required>
-
-                        {% if session.e_new_expense_category is defined %}
-                            <div class="error"> {{ session.e_new_expense_category }} </div>
-                        {% endif %}
-
-                        {% if session.s_new_expense_category is defined %}
-                            <div class="success"> {{ session.s_new_expense_category }} </div>
-                        {% endif %}
-
-                        <button>Add expense category</button>
-                    </form>
-                </div>
-                <div>
-                    <h3>Add your payment method</h3>
-                    <form class="main_form" action="/expense/add-payment-method" method="post">
-                        <label for="new_payment_method">Enter new payment method:</label>
-                        <input type="text" name="new_payment_method" required>
-
-                        {% if session.e_new_payment_method is defined %}
-                            <div class="error"> {{ session.e_new_payment_method }} </div>
-                        {% endif %}
-
-                        {% if session.s_new_payment_method is defined %}
-                            <div class="success"> {{ session.s_new_payment_method }} </div>
-                        {% endif %}
-
-                        <button>Add payment method</button>
-                    </form>
-                </div>
             </div> 
         </div>
     </div>
