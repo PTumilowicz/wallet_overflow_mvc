@@ -58,6 +58,36 @@
                             <button>Add payment method</button>
                         </form>
                     </div>
+                    <div>
+                        <h3>Change income category</h3>
+                        <form class="main_form" action="/settings/remove-income-category" method="post">
+                            <select name="category" required>
+                                <option value="">--- Choose category ---</option>
+                                    {% for income_category in income_categories %}
+                                        <option>{{ income_category.name }}</option>
+                                    {% endfor %}
+                            </select>
+
+                            {% if session.e_income_category_remove is defined %}
+                                <div class="error"> {{ session.e_income_category_remove }} </div>
+                            {% endif %}
+
+                            {% if session.s_income_category_remove is defined %}
+                                <div class="success"> {{ session.s_income_category_remove }} </div>
+                            {% endif %}
+
+                            {% if session.e_income_category_edit is defined %}
+                                <div class="error"> {{ session.e_income_category_edit }} </div>
+                            {% endif %}
+
+                            {% if session.s_income_category_edit is defined %}
+                                <div class="success"> {{ session.s_income_category_edit }} </div>
+                            {% endif %}
+
+                            <button formaction="/edit-income-category/show" class="btn_change edit">Edit income category</button>
+                            <button type="submit" class="btn_change remove">Remove income category</button>
+                        </form>
+                    </div>
                 </div> 
             </div>
         </div>

@@ -1,0 +1,24 @@
+{% extends "base.twig" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block body %}
+
+        <div class="content">
+            <div class="main_content">
+                <div class="main_content_column">
+                    <div>
+                        <h3>Edit category</h3>
+                        <form class="main_form" method="post" action="/edit-income-category/edit" id="formProfile">
+                            <input type="hidden" name="old_category" placeholder="Category" value="{{ income_category }}" required/>
+                            <label for="category">Name</label>
+                            <input name="category" placeholder="Category" value="{{ income_category }}" required/>
+                            <button type="submit">Update</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

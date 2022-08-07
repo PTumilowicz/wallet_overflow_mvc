@@ -248,6 +248,20 @@ main {
     box-sizing: border-box;
 }
 
+.main_form .btn_change {
+    margin: 0.4em;
+}
+
+.main_form .btn_change.edit:hover {
+    border-color: green;
+    color: green;
+}
+
+.main_form .btn_change.remove:hover {
+    border-color: red;
+    color: red;
+}
+
 .main_content form button {
     margin-top: 2em;
 }

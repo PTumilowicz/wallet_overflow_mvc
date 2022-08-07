@@ -23,6 +23,10 @@ class Settings extends Authenticated {
         unset($_SESSION['s_new_expense_category']);
         unset($_SESSION['e_new_payment_method']);
         unset($_SESSION['s_new_payment_method']);
+        unset($_SESSION['e_income_category_remove']);
+        unset($_SESSION['s_income_category_remove']);
+        unset($_SESSION['e_income_category_edit']);
+        unset($_SESSION['s_income_category_edit']);
     }
 
     public function showAction() {
@@ -80,4 +84,17 @@ class Settings extends Authenticated {
         $this->redirect('/settings/show');
     }
 
+    public function removeIncomeCategoryAction() {
+        $incomeCategory = $_POST['category'];
+        $user_id = $this->user->id;
+
+        if (isset($incomeCategory)) {
+            if (IncomeCategory::removeIncomeCategory($user_id, $incomeCategory) == 1) {
+                $_SESSION['s_income_category_remove'] = 'Category removed sucessfully';
+            } else {
+                $_SESSION['e_income_category_remove'] = 'Category not removed. Error occured.';
+            }
+        }
+        $this->redirect('/settings/show');
+    }
 }
