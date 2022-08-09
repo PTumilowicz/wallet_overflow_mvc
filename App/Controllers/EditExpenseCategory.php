@@ -5,9 +5,9 @@ namespace App\Controllers;
 use \Core\View;
 use \App\Auth;
 use \App\Flash;
-use \App\Models\IncomeCategory;
+use \App\Models\ExpenseCategory;
 
-class EditIncomeCategory extends Authenticated {
+class EditExpenseCategory extends Authenticated {
 
     protected function before() {
         parent::before();
@@ -17,9 +17,9 @@ class EditIncomeCategory extends Authenticated {
     public function showAction() {
         $this->oldCategory = $_POST['category'];
 
-        View::renderTemplate('EditIncomeCategory/show.twig', [
+        View::renderTemplate('EditExpenseCategory/show.twig', [
             'user' => $this->user,
-            'income_category' => $this->oldCategory
+            'expense_category' => $this->oldCategory
         ]);
     }
 
@@ -27,11 +27,13 @@ class EditIncomeCategory extends Authenticated {
         $oldCategory = $_POST['old_category'];
         $newCategory = $_POST['category'];
 
+        ExpenseCategory::editExpenseCategory($this->user->id, $oldCategory, $newCategory);
+
         if (isset($oldCategory) && isset($newCategory)) {
-            if (IncomeCategory::editIncomeCategory($this->user->id, $oldCategory, $newCategory)) {
-                $_SESSION['s_income_category_edit'] = 'Category edited sucessfully';
+            if (ExpenseCategory::editExpenseCategory($this->user->id, $oldCategory, $newCategory)) {
+                $_SESSION['s_expense_category_edit'] = 'Expense category edited sucessfully';
             } else {
-                $_SESSION['e_income_category_edit'] = 'Category not edited. Error occured.';
+                $_SESSION['e_expense_category_edit'] = 'Expense category not edited. Error occured.';
             }
         }
         $this->redirect('/settings/show');

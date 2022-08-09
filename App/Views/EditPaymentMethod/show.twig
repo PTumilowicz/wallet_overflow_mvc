@@ -1,0 +1,24 @@
+{% extends "base.twig" %}
+
+{% block title %}Edit Payment Method{% endblock %}
+
+{% block body %}
+
+        <div class="content">
+            <div class="main_content">
+                <div class="main_content_column">
+                    <div>
+                        <h3>Edit payment method</h3>
+                        <form class="main_form" method="post" action="/edit-payment-method/edit" id="formProfile">
+                            <input type="hidden" name="old_payment_method" placeholder="Payment method" value="{{ payment_method }}" required/>
+                            <label for="payment_method">Name</label>
+                            <input name="payment_method" placeholder="Payment method" value="{{ payment_method }}" required/>
+                            <button type="submit">Update</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+{% endblock %}

@@ -6,11 +6,27 @@
 
 <script>
 
-    const categoryRemoveMsg = 'This action will remove all incomes of that category. Are you stil want to remove a category?';
-    const btnCategoryRemove = document.querySelector('#btnCategoryRemove');
+    const incomeCategoryRemoveMsg = 'This action will remove all incomes of that category. Are you stil want to remove a category?';
+    const expenseCategoryRemoveMsg = 'This action will remove all expenses of that category. Are you stil want to remove a category?';
+    const paymentMethodRemoveMsg = 'This action will remove all expenses of that payment method. Are you stil want to remove a category?';
+    const btnIncomeCategoryRemove = document.querySelector('#btnIncomeCategoryRemove');
+    const btnExpenseCategoryRemove = document.querySelector('#btnExpenseCategoryRemove');
+    const btnPaymentMethodRemove = document.querySelector('#btnPaymentMethodRemove');
 
-    btnCategoryRemove.addEventListener('click', function(event) {
-        if (! confirm(categoryRemoveMsg)) {
+    btnIncomeCategoryRemove.addEventListener('click', function(event) {
+        if (! confirm(incomeCategoryRemoveMsg)) {
+            event.preventDefault();
+        }  
+    });
+    
+    btnExpenseCategoryRemove.addEventListener('click', function(event) {
+        if (! confirm(incomeCategoryRemoveMsg)) {
+            event.preventDefault();
+        }  
+    });
+    
+    btnPaymentMethodRemove.addEventListener('click', function(event) {
+        if (! confirm(paymentMethodRemoveMsg)) {
             event.preventDefault();
         }  
     });
@@ -77,7 +93,7 @@
                     </div>
                     <div>
                         <h3>Change income category</h3>
-                        <form class="main_form" action="/settings/remove-income-category" method="post" id="remove_category_form">
+                        <form class="main_form" action="/settings/remove-income-category" method="post">
                             <select name="category" required>
                                 <option value="">--- Choose category ---</option>
                                     {% for income_category in income_categories %}
@@ -101,9 +117,74 @@
                                 <div class="success"> {{ session.s_income_category_edit }} </div>
                             {% endif %}
 
-                            <button formaction="/edit-income-category/show" class="btn_change edit">Edit income category</button>
-                            <button id="btnCategoryRemove" type="submit" class="btn_change remove">Remove income category</button>
+                            <div class="button_aligner">
+                                <button formaction="/edit-income-category/show" class="btn_change edit">Edit income category</button>
+                                <button id="btnIncomeCategoryRemove" type="submit" class="btn_change remove">Remove income category</button>
+                            </div>
                         </form>
+                    </div>
+                    <div>
+                        <h3>Change expense category</h3>
+                        <form class="main_form" action="/settings/remove-expense-category" method="post">
+                            <select name="category" required>
+                                <option value="">--- Choose category ---</option>
+                                    {% for expense_category in expense_categories %}
+                                        <option>{{ expense_category.name }}</option>
+                                    {% endfor %}
+                            </select>
+
+                            {% if session.e_expense_category_remove is defined %}
+                                <div class="error"> {{ session.e_expense_category_remove }} </div>
+                            {% endif %}
+
+                            {% if session.s_expense_category_remove is defined %}
+                                <div class="success"> {{ session.s_expense_category_remove }} </div>
+                            {% endif %}
+
+                            {% if session.e_expense_category_edit is defined %}
+                                <div class="error"> {{ session.e_expense_category_edit }} </div>
+                            {% endif %}
+
+                            {% if session.s_expense_category_edit is defined %}
+                                <div class="success"> {{ session.s_expense_category_edit }} </div>
+                            {% endif %}
+
+                            <div class="button_aligner">
+                                <button formaction="/edit-expense-category/show" class="btn_change edit">Edit expense category</button>
+                                <button id="btnExpenseCategoryRemove" type="submit" class="btn_change remove">Remove expense category</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div>
+                        <h3>Change payment method</h3>
+                        <form class="main_form" action="/settings/remove-payment-method" method="post">
+                            <select name="payment_method" required>
+                                <option value="">--- Choose payment method ---</option>
+                                    {% for payment_method in payment_methods %}
+                                        <option>{{ payment_method.name }}</option>
+                                    {% endfor %}
+                            </select>
+
+                            {% if session.e_payment_method_remove is defined %}
+                                <div class="error"> {{ session.e_payment_method_remove }} </div>
+                            {% endif %}
+
+                            {% if session.s_payment_method_remove is defined %}
+                                <div class="success"> {{ session.s_payment_method_remove }} </div>
+                            {% endif %}
+
+                            {% if session.e_payment_method_edit is defined %}
+                                <div class="error"> {{ session.e_payment_method_edit }} </div>
+                            {% endif %}
+
+                            {% if session.s_payment_method_edit is defined %}
+                                <div class="success"> {{ session.s_payment_method_edit }} </div>
+                            {% endif %}
+                            <div class="button_aligner">
+                                <button formaction="/edit-payment-method/show" class="btn_change edit">Edit payment method</button>
+                                <button id="btnPaymentMethodRemove" type="submit" class="btn_change remove">Remove payment method</button>
+                            </div>
+                        </form> 
                     </div>
                 </div> 
             </div>

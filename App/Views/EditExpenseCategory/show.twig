@@ -1,6 +1,6 @@
 {% extends "base.twig" %}
 
-{% block title %}Edit Income Category{% endblock %}
+{% block title %}Edit Expense Category{% endblock %}
 
 {% block body %}
 
@@ -9,10 +9,10 @@
                 <div class="main_content_column">
                     <div>
                         <h3>Edit category</h3>
-                        <form class="main_form" method="post" action="/edit-income-category/edit" id="formProfile">
-                            <input type="hidden" name="old_category" placeholder="Category" value="{{ income_category }}" required/>
+                        <form class="main_form" method="post" action="/edit-expense-category/edit" id="formProfile">
+                            <input type="hidden" name="old_category" placeholder="Category" value="{{ expense_category }}" required/>
                             <label for="category">Name</label>
-                            <input name="category" placeholder="Category" value="{{ income_category }}" required/>
+                            <input name="category" placeholder="Category" value="{{ expense_category }}" required/>
                             <button type="submit">Update</button>
                         </form>
                     </div>
