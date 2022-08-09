@@ -57,6 +57,8 @@ class IncomeCategory extends \Core\Model {
     }
 
     public static function removeIncomeCategory($user_id, $incomeCategory) {
+        $categoryId = static::getCategoryId($user_id, $incomeCategory);
+
         $sql = 'DELETE FROM `incomes_category_assigned_to_users`
                 WHERE `user_id` = :user_id AND `name` = :name
                 LIMIT 1';
@@ -66,7 +68,39 @@ class IncomeCategory extends \Core\Model {
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->bindParam(':name', $incomeCategory, PDO::PARAM_STR);
 
-        return $stmt->execute();
+        if ($stmt->execute()) {
+            static::removeCategoryIcomes($user_id, $categoryId);
+            return true;
+        }
+
+        return false;
+    }
+
+    public static function getCategoryId($user_id, $incomeCategory) {
+        $sql = 'SELECT id FROM `incomes_category_assigned_to_users`
+                WHERE `user_id` = :user_id AND `name` = :name
+                LIMIT 1';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindParam(':name', $incomeCategory, PDO::PARAM_STR);
+
+        $stmt->execute();
+        $result = $stmt->fetch();
+        return $result['id'];
+    }
+
+    public static function removeCategoryIcomes($user_id, $incomeCategoryId) {
+        $sql = 'DELETE FROM `incomes`
+                WHERE `user_id` = :user_id AND `income_category_assigned_to_user_id` = :incomeCategoryId';
+        
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindParam(':incomeCategoryId', $incomeCategoryId, PDO::PARAM_INT);
+
+        $stmt->execute();
     }
 
     public static function editIncomeCategory($user_id, $oldCategory, $newCategory) {

@@ -2,6 +2,23 @@
 
 {% block title %}Income{% endblock %}
 
+{% block footer %}
+
+<script>
+
+    const categoryRemoveMsg = 'This action will remove all incomes of that category. Are you stil want to remove a category?';
+    const btnCategoryRemove = document.querySelector('#btnCategoryRemove');
+
+    btnCategoryRemove.addEventListener('click', function(event) {
+        if (! confirm(categoryRemoveMsg)) {
+            event.preventDefault();
+        }  
+    });
+
+</script>
+
+{% endblock %}
+
 {% block body %}    
 
         <div class="content">
@@ -60,7 +77,7 @@
                     </div>
                     <div>
                         <h3>Change income category</h3>
-                        <form class="main_form" action="/settings/remove-income-category" method="post">
+                        <form class="main_form" action="/settings/remove-income-category" method="post" id="remove_category_form">
                             <select name="category" required>
                                 <option value="">--- Choose category ---</option>
                                     {% for income_category in income_categories %}
@@ -85,7 +102,7 @@
                             {% endif %}
 
                             <button formaction="/edit-income-category/show" class="btn_change edit">Edit income category</button>
-                            <button type="submit" class="btn_change remove">Remove income category</button>
+                            <button id="btnCategoryRemove" type="submit" class="btn_change remove">Remove income category</button>
                         </form>
                     </div>
                 </div> 
