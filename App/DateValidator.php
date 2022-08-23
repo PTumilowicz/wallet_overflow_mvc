@@ -63,7 +63,7 @@ class DateValidator {
         return $dateRange;
     }
 
-    protected static function findLastDayOfMonth($month, $year) {
+    public static function findLastDayOfMonth($month, $year) {
         switch($month) {
             case '01': case '03': case '05': case '07': case '08': case '10': case '12':
                 return '31';

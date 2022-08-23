@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use PDO;
+use \App\DateValidator;
 
 class ExpenseCategory extends \Core\Model {
 
@@ -173,5 +174,45 @@ class ExpenseCategory extends \Core\Model {
             return $stmt->execute();
         }
         return false;
+    }
+
+    public static function getLimit($user_id, $category) {
+        $sql = 'SELECT cash_limit FROM `expenses_category_assigned_to_users`
+                WHERE `user_id` = :user_id AND `name` = :name
+                LIMIT 1';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindParam(':name', $category, PDO::PARAM_STR);
+
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result[0]['cash_limit'];
+    }
+
+    public static function getMonthlyCategoryExpense($user_id, $categoryId, $date) {
+        $year = substr($date, 0, 4);
+        $month = substr($date, 5, 2);
+        $firstDay = substr($date, 0, 8) . '01';
+        $lastDay = substr($date, 0, 8) . DateValidator::findLastDayOfMonth($month, $year);
+
+        $sql = 'SELECT SUM(amount) AS monthlySum FROM `expenses`
+                WHERE `user_id` = :user_id AND `expense_category_assigned_to_user_id` = :category_id
+                AND `date_of_expense` BETWEEN :start_date AND :end_date
+                LIMIT 1';
+
+        $db = static::getDB();
+        $stmt = $db->prepare($sql);
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindParam(':category_id', $categoryId, PDO::PARAM_INT);
+        $stmt->bindParam(':start_date', $firstDay, PDO::PARAM_STR);
+        $stmt->bindParam(':end_date', $lastDay, PDO::PARAM_STR);
+
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        return $result[0]['monthlySum'];
     }
 }

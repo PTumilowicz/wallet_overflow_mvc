@@ -19,11 +19,11 @@
 
                 <form class="main_form" action="/expense/add" method="post">
                     <label for="amount">Expense amount:</label>
-                    <input type="number" name="amount" min="0" step="0.01" required>
+                    <input type="number" name="amount" id="amount" min="0" step="0.01" required>
                     <label for="date">Expense date:</label>
-                    <input type="date" name="date" min='2000-01-01' value="{{ "now"|date("Y-m-d") }}" required>
+                    <input type="date" name="date" id="date" min='2000-01-01' value="{{ "now"|date("Y-m-d") }}" required>
                     <label for="category">Expense category:</label>
-                    <select name="category" required>
+                    <select name="category" id="category" required>
                         <option value="">--- Choose category ---</option>
                             {% for expense_category in expense_categories %}
                                 <option>{{ expense_category.name }}</option>
@@ -49,5 +49,7 @@
         </div>
     </div>
 </main>
+
+<script src="/js/limit.js"></script>
 
 {% endblock %}

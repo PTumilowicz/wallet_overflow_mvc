@@ -234,6 +234,7 @@ main {
 }
 
 .main_form label,
+.main_form span,
 .main_form input,
 .main_form select,
 .main_form textarea {

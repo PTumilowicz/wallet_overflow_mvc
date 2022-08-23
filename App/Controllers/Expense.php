@@ -40,4 +40,25 @@ class Expense extends Authenticated {
         }
         $this->redirect('/expense/show');
     }
+
+    public function limitAction() {
+        $user_id = $this->user->id;
+        $category = $this->route_params['category'];
+
+        echo json_encode(ExpenseCategory::getLimit($user_id, $category), JSON_UNESCAPED_UNICODE);
+    }
+
+    public function limitSumAction() {
+        $user_id = $this->user->id;
+        $category = $this->route_params['category'];
+        $date = $this->route_params['date'];
+
+        $categoryId = ExpenseCategory::getCategoryId($user_id, $category);
+        $limit = ExpenseCategory::getLimit($user_id, $category);
+        $limitSum = ExpenseCategory::getMonthlyCategoryExpense($user_id, $categoryId, $date);
+
+        $cashLeft = $limit - $limitSum;
+
+        echo $cashLeft;
+    }
 }
