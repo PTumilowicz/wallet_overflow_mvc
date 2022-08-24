@@ -58,8 +58,10 @@ const getWarning = () => {
         fetch(`../api/limitSum/${category}/${date}`)
         .then(response => response.json())
         .then(data => {
-            cashLeft = data - amount;
-            renderWarningOnDOM(amountField, cashLeft);
+            if (data != 0) {
+                cashLeft = data - amount;
+                renderWarningOnDOM(amountField, cashLeft);
+            }
         })
     } else {
         limitValue.remove();
