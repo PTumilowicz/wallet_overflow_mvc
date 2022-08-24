@@ -126,7 +126,7 @@
                     <div>
                         <h3>Change expense category</h3>
                         <form class="main_form" action="/settings/remove-expense-category" method="post">
-                            <select name="category" required>
+                            <select name="category" id="expense_category_select" required>
                                 <option value="">--- Choose category ---</option>
                                     {% for expense_category in expense_categories %}
                                         <option>{{ expense_category.name }}</option>
@@ -189,7 +189,8 @@
                 </div> 
             </div>
         </div>
-        
     </main>
+
+    <script src="/js/settings.js"></script>
 
 {% endblock %}

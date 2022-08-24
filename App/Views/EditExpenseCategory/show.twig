@@ -13,6 +13,7 @@
                             <input type="hidden" name="old_category" placeholder="Category" value="{{ expense_category }}" required/>
                             <label for="category">Name</label>
                             <input name="category" placeholder="Category" value="{{ expense_category }}" required/>
+                            <input type="number"  name="cash_limit" min="0" step="0.01" placeholder="Enter expense monthly limit"></input>
                             <button type="submit">Update</button>
                         </form>
                     </div>

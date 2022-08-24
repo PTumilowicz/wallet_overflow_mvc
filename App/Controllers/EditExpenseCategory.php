@@ -26,18 +26,15 @@ class EditExpenseCategory extends Authenticated {
     public function editAction() {
         $oldCategory = $_POST['old_category'];
         $newCategory = $_POST['category'];
-
-        ExpenseCategory::editExpenseCategory($this->user->id, $oldCategory, $newCategory);
+        $cashLimit = $_POST['cash_limit'];
 
         if (isset($oldCategory) && isset($newCategory)) {
-            if (ExpenseCategory::editExpenseCategory($this->user->id, $oldCategory, $newCategory)) {
+            if (ExpenseCategory::editExpenseCategory($this->user->id, $oldCategory, $newCategory, $cashLimit)) {
                 $_SESSION['s_expense_category_edit'] = 'Expense category edited sucessfully';
             } else {
                 $_SESSION['e_expense_category_edit'] = 'Expense category not edited. Error occured.';
             }
         }
-        $this->redirect('/settings/show');
-
         $this->redirect('/settings/show');
     }
 }

@@ -159,17 +159,28 @@ class ExpenseCategory extends \Core\Model {
         $stmt->execute();
     }
 
-    public static function editExpenseCategory($user_id, $oldCategory, $newCategory) {
+    public static function editExpenseCategory($user_id, $oldCategory, $newCategory, $cashLimit) {
         if (static::validateCategory($newCategory)) {
-            $sql = 'UPDATE `expenses_category_assigned_to_users`
-                    SET `name`= :new_category WHERE `user_id` = :user_id AND `name` = :old_category
-                    LIMIT 1';
-    
+
+            if (!empty($cashLimit)) {
+                $sql = 'UPDATE `expenses_category_assigned_to_users`
+                        SET `name`= :new_category, `cash_limit` = :cash_limit WHERE `user_id` = :user_id AND `name` = :old_category
+                        LIMIT 1';
+            } else {
+                $sql = 'UPDATE `expenses_category_assigned_to_users`
+                        SET `name`= :new_category WHERE `user_id` = :user_id AND `name` = :old_category
+                        LIMIT 1';
+            }
+
             $db = static::getDB();
             $stmt = $db->prepare($sql);
             $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
             $stmt->bindParam(':old_category', $oldCategory, PDO::PARAM_STR);
             $stmt->bindParam(':new_category', $newCategory, PDO::PARAM_STR);
+
+            if (!empty($cashLimit)) {
+                $stmt->bindParam(':cash_limit', $cashLimit, PDO::PARAM_INT);
+            }
     
             return $stmt->execute();
         }
