@@ -48,17 +48,13 @@ class Expense extends Authenticated {
         echo json_encode(ExpenseCategory::getLimit($user_id, $category), JSON_UNESCAPED_UNICODE);
     }
 
-    public function limitSumAction() {
+    public function expenseMonthlySumAction() {
         $user_id = $this->user->id;
         $category = $this->route_params['category'];
         $date = $this->route_params['date'];
 
         $categoryId = ExpenseCategory::getCategoryId($user_id, $category);
-        $limit = ExpenseCategory::getLimit($user_id, $category);
-        $limitSum = ExpenseCategory::getMonthlyCategoryExpense($user_id, $categoryId, $date);
 
-        $cashLeft = $limit - $limitSum;
-
-        echo $cashLeft;
+        echo json_encode(ExpenseCategory::getMonthlyCategoryExpense($user_id, $categoryId, $date), JSON_UNESCAPED_UNICODE);
     }
 }
