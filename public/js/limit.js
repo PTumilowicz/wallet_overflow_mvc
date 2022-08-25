@@ -1,14 +1,22 @@
 const amountField = document.querySelector('#amount');
 const dateField = document.querySelector('#date');
 const categoryField = document.querySelector('#category');
+const limitBox = document.querySelector('#limit_box');
+
 const limitInfo = document.createElement('span');
 const limitValue = document.createElement('span');
+const limitLeft = document.createElement('span');
 
-const renderLimitOnDOM = (field, limit) => {
+const renderLimitInfo = (field, limit = '') => {
     if (!!limit) {
         limitInfo.innerText = `You set the limit ${limit} PLN monthly for that category.`;
-        field.insertAdjacentElement('afterend', limitInfo);
+    } else {
+        limitInfo.innerText = `The limit for this category has not been set.`;
     }
+
+    field.appendChild(limitInfo);
+
+    if (limitBox.classList.contains('hidden')) limitBox.classList.toggle('hidden');
 }
 
 const renderWarningOnDOM = (field, cashLeft) => {
@@ -33,17 +41,19 @@ const renderWarningOnDOM = (field, cashLeft) => {
     }
 }
 
-const getLimitForCategory = () => {
+const getLimitForCategory = async () => {
     const category = categoryField.options[categoryField.selectedIndex].value;
 
     if (!!category) {
-        fetch(`../api/limit/${category}`)
-        .then(response => response.json())
-        .then(data => {
-            renderLimitOnDOM(categoryField, data);
-        });
+        try {
+            const res = await fetch(`../api/limit/${category}`);
+            const data = await res.json();
+            return data;
+        } catch (e) {
+            console.log('ERROR', e);
+        }
     } else {
-        limitInfo.remove();
+        limitBox.classList.add('hidden');
     }
 }
 
@@ -68,8 +78,9 @@ const getWarning = () => {
     }
 }
 
-categoryField.addEventListener('change', () => {
-    getLimitForCategory();
+categoryField.addEventListener('change', async () => {
+    const limitInfoData = await getLimitForCategory();
+    renderLimitInfo(limitBox, limitInfoData);
 })
 
 amountField.addEventListener('input', () => {
