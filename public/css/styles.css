@@ -316,9 +316,14 @@ th, td {
     flex-direction: row;
 }
 
-#limit_box {
+#second_column {
+    justify-content: center;
+}
+
+.limit_box {
+    margin: 1em;
     width: 90%;
-    height: 300px;;
+    height: auto;
     border: 3px solid #F4F1DE;
     border-radius: 0.5em;
 }

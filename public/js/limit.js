@@ -1,140 +1,114 @@
+// Const declarations.
 const amountField = document.querySelector('#amount');
 const dateField = document.querySelector('#date');
 const categoryField = document.querySelector('#category');
-const limitBox = document.querySelector('#limit_box');
+
+const limitInfoBox = document.querySelector('#limit_info_box');
+const limitValueBox = document.querySelector('#limit_value_box');
+const limitLeftBox = document.querySelector('#limit_left_box');
 
 const limitInfo = document.createElement('p');
 const limitValue = document.createElement('p');
 const limitLeft = document.createElement('p');
 
-const renderLimitBox = (field, limit = '', monthlyExpenses) => {
+// Rendering alert boxes.
+const renderInfoBox = (field, limit) => {
     if (!!limit) {
-        limitInfo.innerText = `You set the limit ${limit} PLN monthly for that category.`;
-
-        if (limit - monthlyExpenses < 0) {
-            limitValue.classList.add('error');
-            limitValue.innerText = `You are ${monthlyExpenses - limit} PLN below the limit.`;
-        } else {
-            limitValue.classList.remove('error');
-            limitValue.innerText = `You can spend ${limit - monthlyExpenses} PLN more this month.`;
-        }
-
-        
+        limitInfo.innerText = `You set the limit ${limit.toFixed(2)} PLN monthly for that category.`;      
     } else {
         limitInfo.innerText = `The limit for this category has not been set.`;
-        limitValue.innerText = '';
     }
 
     field.appendChild(limitInfo);
+}
+
+const renderValueBox = (field, monthlyExpenses) => {
+    if (!!monthlyExpenses) {
+        limitValue.innerText = `You spent ${monthlyExpenses} PLN this month for that category.`;   
+    } else {
+        limitValue.innerText = `You did not spend any money for this category this month!`;
+    }
+
     field.appendChild(limitValue);
 }
 
-// const renderWarningOnDOM = (field, cashLeft) => {
-//     if (cashLeft >= 0) {
-//         limitValue.innerText = `After operation you will be ${cashLeft} PLN above the limit.`;
+const renderLeftBox = (field, limitInfoData, monthlyExpenses, amount) => {
+    limitLeft.innerText = `Limit balance after operation: ${(limitInfoData - monthlyExpenses - amount).toFixed(2)} PLN`;   
 
-//         if (limitValue.classList.contains('error')) {
-//             limitValue.classList.remove('error');
-//         }
+    field.appendChild(limitLeft);
+}
 
-//         limitValue.classList.add('success');
-//         field.insertAdjacentElement('afterend', limitValue);
-//     } else {
-//         limitValue.innerText = `After operation you will be ${-cashLeft} PLN below the limit.`;
-
-//         if (limitValue.classList.contains('success')) {
-//             limitValue.classList.remove('success');
-//         }
-
-//         limitValue.classList.add('error');
-//         field.insertAdjacentElement('afterend', limitValue);
-//     }
-// }
-
-const getLimitForCategory = async () => {
-    const category = categoryField.options[categoryField.selectedIndex].value;
-
-    if (!!category) {
-        try {
-            const res = await fetch(`../api/limit/${category}`);
-            const data = await res.json();
-            return data;
-        } catch (e) {
-            console.log('ERROR', e);
-        }
-    } else {
-        limitBox.classList.add('hidden');
+// Async fetch funtcions.
+const getLimitForCategory = async (category) => {
+    try {
+        const res = await fetch(`../api/limit/${category}`);
+        const data = await res.json();
+        return data;
+    } catch (e) {
+        console.log('ERROR', e);
     }
 }
 
-const getMonthlyExpenses = async () => {
+const getMonthlyExpenses = async (category, date) => {
+    try {
+        const res = await fetch(`../api/limitSum/${category}/${date}`);
+        const data = await res.json();
+        return data;
+    } catch (e) {
+        console.log('ERROR', e);
+    }
+}
+
+// Events logic.
+const eventsAction = async (category, date, amount) => {
+    if (!!category) {
+        const limitInfoData = await getLimitForCategory(category);
+        renderInfoBox(limitInfoBox, limitInfoData);
+        limitInfoBox.classList.remove('hidden');
+
+        if (!!date) {
+            const monthlyExpenses = await getMonthlyExpenses(category, date);
+            renderValueBox(limitValueBox, monthlyExpenses);
+            limitValueBox.classList.remove('hidden');
+
+            if (!!amount) {
+                renderLeftBox(limitLeftBox, limitInfoData, monthlyExpenses, amount);
+                limitLeftBox.classList.remove('hidden');
+            } else {
+                limitLeftBox.classList.add('hidden');
+            }
+        } else {
+            limitValueBox.classList.add('hidden');
+            limitLeftBox.classList.add('hidden');
+        }
+    } else {
+        limitInfoBox.classList.add('hidden');
+        limitValueBox.classList.add('hidden');
+        limitLeftBox.classList.add('hidden');
+    }
+}
+
+// Event listeners.
+categoryField.addEventListener('change', async () => {
     const category = categoryField.options[categoryField.selectedIndex].value;
     const date = dateField.value;
+    const amount = amountField.value;
 
-    if (!!category && !!date) {
-        try {
-            const res = await fetch(`../api/limitSum/${category}/${date}`);
-            const data = await res.json();
-            return data;
-        } catch (e) {
-            console.log('ERROR', e);
-        }
-    }
-}
-
-// const getWarning = () => {
-//     const category = categoryField.options[categoryField.selectedIndex].value;
-//     const date = dateField.value;
-//     const amount = amountField.value;
-
-//     let cashLeft = 0;
-
-//     if (!!category && !!date && !!amount) {
-//         fetch(`../api/limitSum/${category}/${date}`)
-//         .then(response => response.json())
-//         .then(data => {
-//             if (data != 0) {
-//                 cashLeft = data - amount;
-//                 renderWarningOnDOM(amountField, cashLeft);
-//             }
-//         })
-//     } else {
-//         limitValue.remove();
-//     }
-// }
-
-categoryField.addEventListener('change', async () => {
-    const limitInfoData = await getLimitForCategory();
-    const monthlyExpenses = await getMonthlyExpenses();
-
-    if (limitInfoData === undefined) {
-        limitBox.classList.add('hidden');
-    } else {
-        renderLimitBox(limitBox, limitInfoData, monthlyExpenses);
-        limitBox.classList.remove('hidden');
-    }
+    eventsAction(category, date, amount);
 })
 
 dateField.addEventListener('change', async () => {
     const category = categoryField.options[categoryField.selectedIndex].value;
+    const date = dateField.value;
+    const amount = amountField.value;
 
-    if (!!category) {
-        const limitInfoData = await getLimitForCategory();
-
-        if (!!limitInfoData) {
-            const monthlyExpenses = await getMonthlyExpenses();
-
-            if (limitInfoData - monthlyExpenses < 0) {
-                limitValue.classList.add('error');
-                limitValue.innerText = `You are ${monthlyExpenses - limitInfoData} PLN below the limit.`;
-            } else {
-                limitValue.classList.remove('error');
-                limitValue.innerText = `You can spend ${limitInfoData - monthlyExpenses} PLN more this month.`;
-            }
-        }
-    }
+    eventsAction(category, date, amount);
 })
 
-// amountField.addEventListener('input', () => {
-//     getWarning();
-// })
+amountField.addEventListener('input', async () => {
+    const category = categoryField.options[categoryField.selectedIndex].value;
+    const date = dateField.value;
+    const amount = amountField.value;
+
+    eventsAction(category, date, amount);
+})
