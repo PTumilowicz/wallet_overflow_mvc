@@ -35,7 +35,13 @@ const renderValueBox = (field, monthlyExpenses) => {
 const renderLeftBox = (field, limitInfoData, monthlyExpenses, amount) => {
     limitLeft.innerText = `Limit balance after operation: ${(limitInfoData - monthlyExpenses - amount).toFixed(2)} PLN`;   
 
+    (limitInfoData - monthlyExpenses - amount).toFixed(2) < 0 ?  field.classList.add('break_limit') :  field.classList.remove('break_limit');
+
     field.appendChild(limitLeft);
+}
+
+const showBox = (box) => {
+    box.classList.add('visible');
 }
 
 // Async fetch funtcions.
@@ -64,27 +70,30 @@ const eventsAction = async (category, date, amount) => {
     if (!!category) {
         const limitInfoData = await getLimitForCategory(category);
         renderInfoBox(limitInfoBox, limitInfoData);
-        limitInfoBox.classList.remove('hidden');
-
+        
         if (!!date) {
             const monthlyExpenses = await getMonthlyExpenses(category, date);
             renderValueBox(limitValueBox, monthlyExpenses);
-            limitValueBox.classList.remove('hidden');
 
-            if (!!amount) {
+            if (!!amount && !!limitInfoData) {
                 renderLeftBox(limitLeftBox, limitInfoData, monthlyExpenses, amount);
-                limitLeftBox.classList.remove('hidden');
+                showBox(limitInfoBox);
+                showBox(limitValueBox);
+                showBox(limitLeftBox);
             } else {
-                limitLeftBox.classList.add('hidden');
+                showBox(limitInfoBox)
+                showBox(limitValueBox);
+                limitLeftBox.classList.remove('visible');
             }
         } else {
-            limitValueBox.classList.add('hidden');
-            limitLeftBox.classList.add('hidden');
+            showBox(limitInfoBox);
+            limitValueBox.classList.remove('visible');
+            limitLeftBox.classList.remove('visible');
         }
     } else {
-        limitInfoBox.classList.add('hidden');
-        limitValueBox.classList.add('hidden');
-        limitLeftBox.classList.add('hidden');
+        limitInfoBox.classList.remove('visible');
+        limitValueBox.classList.remove('visible');
+        limitLeftBox.classList.remove('visible');
     }
 }
 

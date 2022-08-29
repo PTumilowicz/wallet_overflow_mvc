@@ -301,7 +301,9 @@ th, td {
 }
 
 .hidden {
-    display:none;
+    display: none;
+    background-color: red;
+    
 }
 
 .piechart {
@@ -323,7 +325,19 @@ th, td {
 .limit_box {
     margin: 1em;
     width: 90%;
-    height: auto;
+    height: 3em;
     border: 3px solid #F4F1DE;
     border-radius: 0.5em;
+    opacity: 0;
+    transition: all 600ms;
+}
+
+.limit_box.visible {
+    opacity: 1;
+    transition: opacity 600ms;
+}
+
+.limit_box.visible.break_limit {
+    border-color: #BF1919;
+    transition: border-color 600ms;
 }
